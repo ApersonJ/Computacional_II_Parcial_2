@@ -1,0 +1,306 @@
+
+
+*******************************************************************************
+Mon Nov 23 16:40:35 2026
+
+
+FIT:    data read from 'results/convergencia/espacial.dat' using (log10($1)):(log10($2))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_esp(x)
+	f_esp(x) = p_esp*x + b_esp
+fitted parameters initialized with current variable values
+
+   5 1.2878048231e-05  -3.34e-09  1.27e-05   -9.624839e-04  -1.949046e-01
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 1.2878e-05
+rel. change during last iteration : -3.34129e-14
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.00253752
+variance of residuals (reduced chisquare) = WSSR/ndf   : 6.43902e-06
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_esp           = -0.000962484     +/- 0.00377      (391.7%)
+b_esp           = -0.194905        +/- 0.005617     (2.882%)
+
+correlation matrix of the fit parameters:
+                p_esp  b_esp  
+p_esp           1.000 
+b_esp           0.974  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 16:40:35 2026
+
+
+FIT:    data read from 'results/convergencia/espacial.dat' using (log10($1)):(log10($3))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_ene(x)
+	f_ene(x) = p_ene*x + b_ene
+fitted parameters initialized with current variable values
+
+   5 2.0547329951e-06   0.00e+00  1.27e+02    1.995891e+00   1.433825e+00
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 2.05473e-06
+rel. change during last iteration : 0
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.00101359
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1.02737e-06
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_ene           = 1.99589          +/- 0.001506     (0.07545%)
+b_ene           = 1.43382          +/- 0.002244     (0.1565%)
+
+correlation matrix of the fit parameters:
+                p_ene  b_ene  
+p_ene           1.000 
+b_ene           0.974  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 16:40:35 2026
+
+
+FIT:    data read from 'results/convergencia/temporal.dat' using (log10($1)):(log10($2))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_tem(x)
+	f_tem(x) = p_tem*x + b_tem
+fitted parameters initialized with current variable values
+
+   4 7.0641772189e-03  -7.66e-02  1.32e-04    2.012094e+00   1.983161e+00
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 0.00706418
+rel. change during last iteration : -7.66381e-07
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.0594314
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.00353209
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_tem           = 2.01209          +/- 0.08829      (4.388%)
+b_tem           = 1.98316          +/- 0.1399       (7.055%)
+
+correlation matrix of the fit parameters:
+                p_tem  b_tem  
+p_tem           1.000 
+b_tem           0.977  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 16:44:33 2026
+
+
+FIT:    data read from 'results/convergencia/espacial.dat' using (log10($1)):(log10($2))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_esp(x)
+	f_esp(x) = p_esp*x + b_esp
+fitted parameters initialized with current variable values
+
+   4 5.2444061826e-04  -2.45e-02  1.27e-04    1.826424e+00   7.926804e-01
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 0.000524441
+rel. change during last iteration : -2.45129e-07
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.0161932
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.00026222
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_esp           = 1.82642          +/- 0.02406      (1.317%)
+b_esp           = 0.79268          +/- 0.03585      (4.522%)
+
+correlation matrix of the fit parameters:
+                p_esp  b_esp  
+p_esp           1.000 
+b_esp           0.974  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 16:44:33 2026
+
+
+FIT:    data read from 'results/convergencia/espacial.dat' using (log10($1)):(log10($3))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_ene(x)
+	f_ene(x) = p_ene*x + b_ene
+fitted parameters initialized with current variable values
+
+   5 2.0547329951e-06   0.00e+00  1.27e+02    1.995891e+00   1.433825e+00
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 2.05473e-06
+rel. change during last iteration : 0
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.00101359
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1.02737e-06
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_ene           = 1.99589          +/- 0.001506     (0.07545%)
+b_ene           = 1.43382          +/- 0.002244     (0.1565%)
+
+correlation matrix of the fit parameters:
+                p_ene  b_ene  
+p_ene           1.000 
+b_ene           0.974  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 16:44:33 2026
+
+
+FIT:    data read from 'results/convergencia/temporal.dat' using (log10($1)):(log10($2))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_tem(x)
+	f_tem(x) = p_tem*x + b_tem
+fitted parameters initialized with current variable values
+
+   4 7.0641772189e-03  -7.66e-02  1.32e-04    2.012094e+00   1.983161e+00
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 0.00706418
+rel. change during last iteration : -7.66381e-07
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.0594314
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.00353209
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_tem           = 2.01209          +/- 0.08829      (4.388%)
+b_tem           = 1.98316          +/- 0.1399       (7.055%)
+
+correlation matrix of the fit parameters:
+                p_tem  b_tem  
+p_tem           1.000 
+b_tem           0.977  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 17:46:14 2026
+
+
+FIT:    data read from 'results/convergencia/espacial.dat' using (log10($1)):(log10($2))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_esp(x)
+	f_esp(x) = p_esp*x + b_esp
+fitted parameters initialized with current variable values
+
+   4 5.2444061826e-04  -2.45e-02  1.27e-04    1.826424e+00   7.926804e-01
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 0.000524441
+rel. change during last iteration : -2.45129e-07
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.0161932
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.00026222
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_esp           = 1.82642          +/- 0.02406      (1.317%)
+b_esp           = 0.79268          +/- 0.03585      (4.522%)
+
+correlation matrix of the fit parameters:
+                p_esp  b_esp  
+p_esp           1.000 
+b_esp           0.974  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 17:46:14 2026
+
+
+FIT:    data read from 'results/convergencia/espacial.dat' using (log10($1)):(log10($3))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_ene(x)
+	f_ene(x) = p_ene*x + b_ene
+fitted parameters initialized with current variable values
+
+   5 2.0547329951e-06   0.00e+00  1.27e+02    1.995891e+00   1.433825e+00
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 2.05473e-06
+rel. change during last iteration : 0
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.00101359
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1.02737e-06
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_ene           = 1.99589          +/- 0.001506     (0.07545%)
+b_ene           = 1.43382          +/- 0.002244     (0.1565%)
+
+correlation matrix of the fit parameters:
+                p_ene  b_ene  
+p_ene           1.000 
+b_ene           0.974  1.000 
+
+
+*******************************************************************************
+Mon Nov 23 17:46:14 2026
+
+
+FIT:    data read from 'results/convergencia/temporal.dat' using (log10($1)):(log10($2))
+        format = x:z
+        #datapoints = 4
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f_tem(x)
+	f_tem(x) = p_tem*x + b_tem
+fitted parameters initialized with current variable values
+
+   4 7.0641772189e-03  -7.66e-02  1.32e-04    2.012094e+00   1.983161e+00
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 0.00706418
+rel. change during last iteration : -7.66381e-07
+
+degrees of freedom    (FIT_NDF)                        : 2
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.0594314
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.00353209
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+p_tem           = 2.01209          +/- 0.08829      (4.388%)
+b_tem           = 1.98316          +/- 0.1399       (7.055%)
+
+correlation matrix of the fit parameters:
+                p_tem  b_tem  
+p_tem           1.000 
+b_tem           0.977  1.000 

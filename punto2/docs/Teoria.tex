@@ -1,0 +1,143 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\setlength{\parskip}{0.4em}
+\renewcommand{\arraystretch}{1.2}
+
+\title{Análogo mecánico del motor molecular \emph{flashing ratchet}:\\ teoría y estructura del código}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Se describe el modelo de un motor browniano de tipo \emph{flashing ratchet} (potencial asimétrico periódico que se enciende y se apaga), su dinámica de Langevin con ruido térmico, el integrador estocástico utilizado y la organización del programa en C++ que lo simula, tanto en su versión determinista como en la estocástica.
+\end{abstract}
+
+\section{Teoría}
+
+\subsection{Motores brownianos y \emph{flashing ratchet}}
+Un motor molecular (por ejemplo, la miosina sobre un filamento de actina) convierte fluctuaciones térmicas en movimiento dirigido. El modelo mínimo es el \emph{flashing ratchet}: una partícula se mueve en un potencial periódico \emph{asimétrico} que se enciende y se apaga de forma periódica. No existe una fuerza neta media, de modo que el transporte es posible únicamente porque el sistema está fuera del equilibrio.
+
+El mecanismo tiene dos fases. Con el potencial \textbf{apagado}, la partícula difunde libremente. Con el potencial \textbf{encendido}, relaja hacia el mínimo más cercano. Como la forma del pozo es asimétrica, la probabilidad de caer en el pozo de la derecha es distinta de la de caer en el de la izquierda, y aparece una corriente neta.
+
+\subsection{Potencial y fuerza}
+Con periodo espacial $L$, profundidad $U_0$ y parámetro de asimetría $\alpha\in(0,1)$, se definen las coordenadas reducidas
+\begin{equation}
+x_r = x - L\left\lfloor \frac{x}{L}\right\rfloor, \qquad
+t_r = t - \tau\left\lfloor \frac{t}{\tau}\right\rfloor, \qquad \tau=\tau_{\text{on}}+\tau_{\text{off}} .
+\end{equation}
+El potencial es un diente de sierra modulado en el tiempo:
+\begin{equation}
+U(x,t)=\mu(t)\,u(x_r),\qquad
+u(x_r)=\begin{cases}
+\dfrac{U_0}{\alpha L}\,x_r, & 0\le x_r<\alpha L,\\[2mm]
+\dfrac{U_0}{(1-\alpha)L}\,(L-x_r), & \alpha L\le x_r<L,
+\end{cases}
+\end{equation}
+con el modulador $\mu(t)=1$ si $t_r<\tau_{\text{on}}$ y $\mu(t)=0$ en caso contrario. Los mínimos están en $x=nL$ y el máximo en $x=nL+\alpha L$. La fuerza $F=-\partial U/\partial x$ es constante a tramos:
+\begin{equation}
+F(x,t)=\mu(t)\begin{cases}
+-\,U_0/(\alpha L), & 0< x_r<\alpha L,\\
++\,U_0/\big((1-\alpha)L\big), & \alpha L< x_r<L .
+\end{cases}
+\end{equation}
+Para $\alpha<1/2$ el lado de subida es el más empinado y se espera una corriente hacia $+x$; para $\alpha=1/2$ el potencial es simétrico y la corriente debe anularse.
+
+\subsection{Dinámica}
+El modelo estocástico es la ecuación de Langevin subamortiguada, con $k_B=1$:
+\begin{equation}
+m\ddot x = F(x,t)-\gamma\dot x+\sqrt{2\gamma k_BT}\,\xi(t),\qquad
+\langle\xi(t)\xi(t')\rangle=\delta(t-t'),
+\end{equation}
+donde la amplitud del ruido y la fricción están ligadas por el teorema de fluctuación--disipación. El modelo determinista corresponde a $\gamma=0$ y $T=0$, es decir, $m\ddot x=F(x,t)$. En este caso no hay disipación, la energía no se conserva (el encendido y apagado del potencial inyecta y extrae energía) y no existe un estado estacionario bien definido.
+
+\subsection{Integrador GJF}
+Se usa el integrador de Grønbech-Jensen y Farago (GJF), que muestrea correctamente la distribución configuracional para pasos $\Delta t$ relativamente grandes. Con
+\begin{equation}
+b=\frac{1}{1+\gamma\Delta t/2m},\qquad
+a=\frac{1-\gamma\Delta t/2m}{1+\gamma\Delta t/2m},\qquad
+\beta_{n+1}=\sqrt{2\gamma k_BT\,\Delta t}\;\xi_{n+1},
+\end{equation}
+con $\xi_{n+1}\sim\mathcal N(0,1)$, el paso es
+\begin{align}
+x_{n+1}&=x_n+b\,\Delta t\,v_n+\frac{b\,\Delta t^2}{2m}F_n+\frac{b\,\Delta t}{2m}\beta_{n+1},\\
+v_{n+1}&=a\,v_n+\frac{\Delta t}{2m}\big(a\,F_n+F_{n+1}\big)+\frac{b}{m}\beta_{n+1},
+\end{align}
+con $F_n=F(x_n,t_n)$ y $F_{n+1}=F(x_{n+1},t_{n+1})$. Si $\gamma=T=0$ se tiene $a=b=1$ y $\beta=0$, y el esquema se reduce a Velocity-Verlet. Como la fuerza es discontinua (en los quiebres del diente de sierra y en los instantes de conmutación), el orden de precisión efectivo es menor que el nominal y el error aparece en los pasos que cruzan una discontinuidad.
+
+\subsection{Observables}
+Para cada instante guardado se calculan
+\begin{equation}
+p=mv,\qquad K=\tfrac12 mv^2,\qquad U=U(x,t),\qquad E=K+U .
+\end{equation}
+En el modelo estocástico se promedian sobre un ensamble de $N_{\text{ens}}$ realizaciones independientes (semillas $1000+k$). La velocidad media se estima como
+\begin{equation}
+\langle v\rangle=\frac{1}{N_{\text{ens}}}\sum_{k=1}^{N_{\text{ens}}}\frac{x_k(t_f)-x_0}{t_f}.
+\end{equation}
+Esta estimación incluye el transitorio inicial; la pendiente de $\langle x\rangle(t)$ en la segunda mitad de la simulación es una medida más fiable del régimen estacionario.
+
+\section{Estructura del código}
+
+\subsection{Organización}
+El programa está escrito en C++ y se divide en clases con una responsabilidad cada una.
+
+\begin{center}
+\begin{tabular}{@{}l >{\raggedright\arraybackslash}p{10cm}@{}}
+\toprule
+Archivo & Contenido \\
+\midrule
+\texttt{particle.h} & Clase \texttt{Particle}: estado $(x,v,m)$, momento y energía cinética. \\
+\texttt{motormodel.h/.cpp} & Clase \texttt{MotorModel}: contiene la partícula y los parámetros ($\gamma$, $k_BT$, $L$, $U_0$, $\alpha$); calcula \texttt{force} y \texttt{potentialEnergy} en función de $t$, $\tau_{\text{on}}$ y $\tau_{\text{off}}$. \\
+\texttt{integrator.h} & Clase \texttt{Integrator}: guarda una copia del modelo, un generador \texttt{mt19937} con distribución normal y el método \texttt{GJFIntegrator} que avanza un paso $\Delta t$; \texttt{setSeed} fija la semilla de cada realización. \\
+\texttt{main.cpp} & Lectura de parámetros, creación de los objetos y función \texttt{Simulation}, que ejecuta el ensamble, acumula promedios y escribe los resultados. \\
+\texttt{graphics.h/.cpp} & Clase \texttt{Graphics}: genera scripts de gnuplot y las animaciones \texttt{.gif}. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Flujo de ejecución}
+\begin{enumerate}
+\item \texttt{main} pregunta si se usa el modelo estocástico o el determinista y lee $t_f$, $\tau_{\text{on}}$, $\tau_{\text{off}}$, $x_0$, $v_0$, $m$, $L$, $U_0$, $\alpha$ (y $\gamma$, $k_BT$ en el caso estocástico). Se usan $\Delta t=10^{-3}$, $N_{\text{ens}}=500$ (estocástico) o $1$ (determinista) y se guarda un dato cada 10 pasos.
+\item Se instancian \texttt{Particle}, \texttt{MotorModel} e \texttt{Integrator}.
+\item \texttt{Simulation} repite para cada realización $k$: reinicia $(x_0,v_0)$, fija la semilla $1000+k$ y avanza \texttt{N\_pasos} pasos con \texttt{GJFIntegrator}.
+\item Cada \texttt{saveStride} pasos se acumulan $x$, $v$, $K$, $U$ y $E$ para los promedios; la realización $k=0$ se escribe completa como trayectoria individual.
+\item Al terminar, se escriben los promedios y se imprime la velocidad media $\langle v\rangle$.
+\item \texttt{Graphics} lee los \texttt{.dat} y genera ocho animaciones con gnuplot.
+\end{enumerate}
+
+\subsection{Archivos de salida}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Archivo (en \texttt{../results/}) & Columnas \\
+\midrule
+\texttt{trayectoria\_individual.dat} & $t,\;x,\;v,\;p,\;K,\;U,\;E$ (realización $k=0$) \\
+\texttt{promedios\_ensamble.dat} & $t,\;\langle x\rangle,\;\langle v\rangle,\;\langle p\rangle,\;\langle K\rangle,\;\langle U\rangle,\;\langle E\rangle$ \\
+\texttt{animations/*.gif} & posición, espacio de fases, velocidad, momento, energía total, \\
+ & posición media, energía cinética media y energía potencial media \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Compilación y uso}
+Desde la carpeta \texttt{src}, con las carpetas \texttt{../results/animations/} y \texttt{../scripts/} ya creadas y gnuplot instalado:
+\begin{center}
+\texttt{g++ -std=c++17 -O2 *.cpp -o ratchet \&\& ./ratchet}
+\end{center}
+
+\section{Comprobaciones recomendadas}
+\begin{itemize}
+\item \textbf{Sin potencial} ($U_0=0$, estocástico): $\langle K\rangle\to k_BT/2$ y el desplazamiento cuadrático medio crece como $2(k_BT/\gamma)\,t$ a tiempos largos.
+\item \textbf{Simetría} ($\alpha=1/2$): la velocidad media debe ser nula dentro del error estadístico.
+\item \textbf{Dirección}: para $\alpha<1/2$, $\langle v\rangle>0$.
+\item \textbf{Energía} (determinista, $\tau_{\text{off}}=0$, condición inicial lejos del mínimo): el error máximo de $E$ debe disminuir proporcionalmente a $\Delta t$; no es exactamente cero porque la fuerza es discontinua.
+\end{itemize}
+
+\end{document}

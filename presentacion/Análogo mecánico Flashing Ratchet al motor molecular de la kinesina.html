@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Análogo mecánico Flashing Ratchet al motor molecular de la kinesina</title>
+<style>
+:root{--bg:#e9e7e1;--paper:#fdfcf8;--fg:#1d2230;--mut:#5d6370;--ac:#1d3f72;--ac2:#a23b2a;--bd:#cfcbc0;--soft:#f0eee6;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1115;--paper:#191c23;--fg:#e8e6df;--mut:#9aa0ab;--ac:#8fb4ee;--ac2:#ee9a86;--bd:#333845;--soft:#20242d}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1115;--paper:#191c23;--fg:#e8e6df;--mut:#9aa0ab;--ac:#8fb4ee;--ac2:#ee9a86;--bd:#333845;--soft:#20242d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden}
+.deck{container-type:size;width:min(96vw,calc((100vh - 70px)*16/9));aspect-ratio:16/9;position:relative;background:var(--paper);border:1px solid var(--bd);box-shadow:0 6px 24px rgba(0,0,0,.12);overflow:hidden}
+.slide{position:absolute;inset:0;padding:5cqw 6cqw 4.6cqw;font-size:2.05cqw;line-height:1.42;opacity:0;pointer-events:none;transition:opacity .25s;display:flex;flex-direction:column}
+.slide.on{opacity:1;pointer-events:auto}
+h1{font-size:4.4cqw;line-height:1.15;margin:0 0 1.2cqw;color:var(--ac)}
+h2{font-size:3cqw;margin:0 0 1.6cqw;color:var(--ac);padding-bottom:.8cqw;border-bottom:2px solid var(--ac);font-weight:600}
+h3{font-size:2.1cqw;margin:1cqw 0 .3cqw;color:var(--ac2);font-weight:600}
+p{margin:.5cqw 0}
+ul{margin:.4cqw 0;padding-left:2.4cqw}li{margin:.35cqw 0}
+.sub{color:var(--mut);font-style:italic}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:3cqw;align-items:start}
+.box{background:var(--soft);border-left:.4cqw solid var(--ac);padding:1cqw 1.6cqw;margin:1cqw 0}
+.eq{margin:.6cqw 0;overflow:hidden}
+mjx-container{max-width:100%;color:var(--fg)}
+mjx-container[display="true"]{margin:.5em 0!important}
+table{border-collapse:collapse;width:100%;font-size:1.85cqw}
+th,td{border-bottom:1px solid var(--bd);padding:.55cqw .9cqw;text-align:left;vertical-align:top}
+th{color:var(--ac);border-bottom:2px solid var(--ac)}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.88em;background:var(--soft);padding:0 .3em;border-radius:3px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4cqw}
+.card{border:1px solid var(--bd);border-top:.35cqw solid var(--ac);padding:.8cqw 1.1cqw;background:var(--soft)}
+.card b{color:var(--ac);display:block}
+.card span{font-size:1.75cqw;color:var(--mut)}
+.ft{position:absolute;left:6cqw;right:6cqw;bottom:1.4cqw;display:flex;justify-content:space-between;font-size:1.4cqw;color:var(--mut)}
+svg text{fill:var(--mut);font-family:Georgia,serif}
+.nav{display:flex;gap:10px;align-items:center;font:14px system-ui,sans-serif;color:var(--mut)}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--paper);color:var(--fg);border-radius:6px;padding:6px 14px}
+button:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.bar{position:absolute;left:0;top:0;height:.5cqw;background:var(--ac2);transition:width .25s}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js" async></script>
+</head><body>
+<div class="deck" id="deck"><div class="bar" id="bar"></div>
+
+<section class="slide on" style="justify-content:center">
+<p class="sub">Simulación de un motor browniano en C++</p>
+<h1>Análogo mecánico Flashing Ratchet al motor molecular de la kinesina</h1>
+<p><b>Nicolas López y Jesús Vitola</b></p>
+
+</section>
+
+<section class="slide"><h2>¿Qué es la kinesina?</h2>
+<div class="cols"><div>
+<ul>
+<li>Proteína motora que camina a lo largo de los <b>microtúbulos</b> y transporta carga (vesículas, organelos).</li>
+<li>Obtiene la energía de la hidrólisis del ATP: \(\mathrm{ATP}\to\mathrm{ADP}+\mathrm{P_i}\).</li>
+<li>La mayoría son dímeros con dos cabezas que avanzan «mano sobre mano».</li>
+<li><b>KIF1A</b> (kinesina-3) es un monómero de <b>una sola cabeza</b> y aun así es procesiva: recorre más de 1 µm.</li>
+</ul></div><div>
+<div class="box"><h3>Idea clave</h3><p>El movimiento dirigido nace de combinar agitación térmica, un riel asimétrico y una fuente de energía química.</p></div></div></div>
+<div class="ft"><span>Kinesina</span><span>2</span></div></section>
+
+<section class="slide"><h2>Relación con el motor browniano</h2>
+<p>La cabeza de KIF1A se modela como una partícula browniana sobre un riel asimétrico y periódico. El ruido térmico y la asimetría, junto con una fuente de energía que conmuta el potencial, producen movimiento dirigido.</p>
+<table><tr><th>Kinesina (KIF1A)</th><th>Modelo flashing ratchet</th></tr>
+<tr><td>Cabeza motora</td><td>Partícula con posición \(x\) y masa \(m\)</td></tr>
+<tr><td>Microtúbulo, periodo \(L\) y polaridad</td><td>Potencial diente de sierra asimétrico de periodo \(L\)</td></tr>
+<tr><td>Unión fuerte o débil al microtúbulo</td><td>Potencial encendido o apagado</td></tr>
+<tr><td>Ciclo de ATP, ADP y P\(_\mathrm{i}\)</td><td>Fuente de energía que conmuta el potencial</td></tr>
+<tr><td>Agitación térmica del solvente</td><td>Fricción \(\gamma\) y ruido térmico \(k_BT\)</td></tr></table>
+<div class="ft"><span>Kinesina y motor</span><span>3</span></div></section>
+
+<section class="slide"><h2>Flashing ratchet: el mecanismo</h2>
+<div class="cols"><div>
+<svg viewBox="0 0 360 120" width="100%"><polyline points="0,95 36,15 120,95 156,15 240,95 276,15 360,95" fill="none" stroke="var(--ac)" stroke-width="3"/>
+<line x1="0" y1="95" x2="360" y2="95" stroke="var(--bd)"/><text x="30" y="112" font-size="12">αL</text><text x="112" y="112" font-size="12">L</text><text x="2" y="14" font-size="12">U₀</text></svg>
+<p class="sub">Potencial encendido: diente de sierra de periodo \(L\), con mínimos en \(x=nL\) y máximos en \(x=nL+\alpha L\).</p></div>
+<div><ul>
+<li><b>Apagado</b> (\(\tau_\mathrm{off}\)): la partícula difunde libremente.</li>
+<li><b>Encendido</b> (\(\tau_\mathrm{on}\)): relaja hacia el mínimo más cercano.</li>
+<li>Como el pozo es asimétrico, es más probable caer en un pozo vecino que en el otro: aparece una corriente neta.</li>
+<li>No hay fuerza media neta: el transporte exige estar fuera del equilibrio.</li></ul>
+</div></div>
+<div class="ft"><span>Teoría</span><span>4</span></div></section>
+
+<section class="slide"><h2>Potencial y fuerza</h2>
+<p>Coordenadas reducidas, con \(\tau=\tau_\mathrm{on}+\tau_\mathrm{off}\):</p>
+\[x_r=x-L\left\lfloor \tfrac{x}{L}\right\rfloor,\qquad t_r=t-\tau\left\lfloor \tfrac{t}{\tau}\right\rfloor\]
+<div class="eq">\[U(x,t)=\mu(t)\begin{cases}\dfrac{U_0}{\alpha L}\,x_r & 0\le x_r<\alpha L\\[2mm]\dfrac{U_0}{(1-\alpha)L}\,(L-x_r) & \alpha L\le x_r&lt;L\end{cases}\qquad \mu(t)=\begin{cases}1 & t_r<\tau_\mathrm{on}\\0 & \text{en otro caso}\end{cases}\]</div>
+<div class="eq">\[F=-\frac{\partial U}{\partial x}=\mu(t)\begin{cases}-\dfrac{U_0}{\alpha L} & 0&lt;x_r&lt;\alpha L\\[2mm]+\dfrac{U_0}{(1-\alpha)L} & \alpha L&lt;x_r&lt;L\end{cases}\]</div>
+<p class="sub">La fuerza es constante a tramos y discontinua en los quiebres y en cada conmutación.</p>
+<div class="ft"><span>Teoría · motormodel.cpp</span><span>5</span></div></section>
+
+<section class="slide"><h2>Dinámica: Langevin subamortiguada</h2>
+\[m\,\ddot x=F(x,t)-\gamma\,\dot x+\sqrt{2\gamma k_BT}\;\xi(t)\]
+<ul>
+<li><b>Estocástico:</b> \(\gamma>0\), \(k_BT>0\), con \(k_B=1\); la fricción y el ruido están ligados por la relación de fluctuación–disipación.</li>
+<li><b>Determinista:</b> \(\gamma=0\), \(T=0\), es decir \(m\ddot x=F(x,t)\).</li>
+</ul>
+
+<h3>Observables</h3>
+\[K=\tfrac12 mv^2,\quad p=mv,\quad E=K+U,\quad \langle v\rangle=\frac{1}{N_\mathrm{ens}}\sum_{k=1}^{N_\mathrm{ens}}\frac{x_k(t_f)-x_0}{t_f}\]
+<div class="ft"><span>Teoría</span><span>6</span></div></section>
+
+<section class="slide"><h2>Integrador GJF</h2>
+<p>Esquema de Grønbech-Jensen y Farago (<code>GJFIntegrator</code>), con \(\xi_{n+1}\sim\mathcal N(0,1)\):</p>
+\[b=\frac{1}{1+\frac{\gamma\Delta t}{2m}},\qquad a=\frac{1-\frac{\gamma\Delta t}{2m}}{1+\frac{\gamma\Delta t}{2m}},\qquad \beta_{n+1}=\sqrt{2\gamma k_BT\,\Delta t}\;\xi_{n+1}\]
+\[x_{n+1}=x_n+b\,\Delta t\,v_n+\frac{b\,\Delta t^2}{2m}F_n+\frac{b\,\Delta t}{2m}\beta_{n+1}\]
+\[v_{n+1}=a\,v_n+\frac{\Delta t}{2m}\left(a\,F_n+F_{n+1}\right)+\frac{b}{m}\beta_{n+1}\]
+<ul><li>Con \(\gamma=T=0\): \(a=b=1\), \(\beta=0\) y se obtiene Velocity-Verlet.</li>
+<li>Con fuerza discontinua el error aparece en los pasos que cruzan un quiebre y baja con \(\Delta t\).</li></ul>
+<div class="ft"><span>Teoría · integrator.h</span><span>7</span></div></section>
+
+<section class="slide"><h2>Estructura del código</h2>
+<div class="cards">
+<div class="card"><b>Particle</b><span>particle.h: estado \((x,v,m)\), momento y energía cinética.</span></div>
+<div class="card"><b>MotorModel</b><span>motormodel.h/.cpp: partícula y parámetros \((\gamma,k_BT,L,U_0,\alpha)\); <code>force</code> y <code>potentialEnergy</code>.</span></div>
+<div class="card"><b>Integrator</b><span>integrator.h: copia del modelo, <code>mt19937</code> normal, <code>GJFIntegrator</code> y <code>setSeed</code>.</span></div>
+<div class="card"><b>main / Simulation</b><span>main.cpp: lee parámetros, ejecuta el ensamble, promedia y escribe los <code>.dat</code>.</span></div>
+<div class="card"><b>Graphics</b><span>graphics.h/.cpp: genera scripts de gnuplot y ocho animaciones <code>.gif</code>.</span></div>
+<div class="card"><b>Parámetros</b><span>\(\Delta t=10^{-3}\), \(N_\mathrm{ens}=500\) (estocástico) o 1, guardado cada 10 pasos.</span></div></div>
+<div class="box"><p><code>main</code> crea <code>Particle</code>, luego <code>MotorModel</code> y luego <code>Integrator</code>; <code>Simulation</code> reinicia \((x_0,v_0)\) con semilla \(1000+k\) en cada realización.</p></div>
+<div class="ft"><span>Código</span><span>8</span></div></section>
+
+<section class="slide" style="font-size:1.75cqw;line-height:1.32"><h2>Flujo de ejecución y resultados</h2>
+<div class="cols"><div>
+<ol style="padding-left:2.4cqw">
+<li>Se elige el modelo (estocástico o determinista) y se leen los parámetros.</li>
+<li>Se instancian partícula, modelo e integrador.</li>
+<li><code>Simulation</code> avanza <code>N_pasos</code> con <code>GJFIntegrator</code> para cada realización \(k\).</li>
+<li>Cada 10 pasos se acumulan \(x,v,K,U,E\); la realización \(k=0\) se guarda completa.</li>
+<li>Se escriben los promedios y se imprime \(\langle v\rangle\).</li>
+<li><code>Graphics</code> lee los <code>.dat</code> y crea las animaciones.</li></ol></div>
+<div><table style="font-size:1.5cqw"><tr><th>Archivo en <code>../results/</code></th><th>Contenido</th></tr>
+<tr><td><code>trayectoria_individual.dat</code></td><td>\(t,x,v,p,K,U,E\) con \(k=0\)</td></tr>
+<tr><td><code>promedios_ensamble.dat</code></td><td>\(t,\langle x\rangle,\langle v\rangle,\langle p\rangle,\langle K\rangle,\langle U\rangle,\langle E\rangle\)</td></tr>
+<tr><td><code>animations/*.gif</code></td><td>posición, espacio de fases, velocidad, momento, energías</td></tr></table>
+</div></div>
+<div class="ft"><span>Código</span><span>9</span></div></section>
+
+<section class="slide"><h2>Artículo de referencia: KIF1A de una sola cabeza</h2>
+<p class="sub">Contexto biológico, independiente de la implementación en C++</p>
+<div class="cols" style="grid-template-columns:1fr"><div>
+<h3>Modelo</h3>
+<ul><li>Tres estados internos: \(\Phi\) (sin nucleótido), T (con ATP) y D (con ADP).</li>
+<li>En D la unión es débil y el potencial es constante: la cabeza difunde. En \(\Phi\) y T es fuerte y actúa el diente de sierra \(V_0\).</li>
+<li>Las transiciones ocurren al unirse o soltarse ATP, P\(_\mathrm{i}\) y ADP, en posiciones fijas.</li>
+<li>Dinámica sobreamortiguada: \(\gamma\dot x=-V_i'(x)-F+\xi(t)\); se resuelve la ecuación de Fokker–Planck de forma analítica.</li></ul></div>
+</div>
+<div class="box"><p>La eficiencia es baja por el estado D difusivo: sin una segunda cabeza anclada, una carga pequeña arrastra a la cabeza hacia atrás.</p></div>
+<div class="ft"><span>Artículo</span><span>10</span></div></section>
+
+<section class="slide"><h2>Del modelo de dos estados al de tres estados</h2>
+<div class="cols"><div>
+<h3>Modelo de dos estados</h3>
+<ul><li>Unión débil: difusión libre. Unión fuerte: potencial diente de sierra \(V_0\) de periodo \(L\), altura \(W\) y asimetría \(a&lt;L/2\).</li>
+<li>Explica el movimiento de KIF1A, pero no la dependencia con las concentraciones de ATP, ADP y P\(_\mathrm{i}\).</li></ul></div>
+<div><h3>Modelo de tres estados</h3>
+<ul><li>La conmutación ocurre al unirse o soltarse un nucleótido, con tasas que dependen de su concentración.</li>
+<li>Permite estudiar la tasa de reacción, la potencia y la eficiencia del motor.</li></ul></div></div>
+<div class="box"><p>Referencia: R. Kanada y K. Sasaki, <i>Energetics of the single-headed kinesin KIF1A</i>, Phys. Rev. E <b>88</b>, 022711 (2013).</p></div>
+<div class="ft"><span>Artículo</span><span>11</span></div></section>
+</div>
+
+<div class="nav"><button id="pv" aria-label="Anterior">&larr; Anterior</button><span id="ct">1 / 11</span><button id="nx" aria-label="Siguiente">Siguiente &rarr;</button></div>
+<script>
+const S=[...document.querySelectorAll('.slide')];let i=0;
+function go(n){i=Math.max(0,Math.min(S.length-1,n));S.forEach((s,k)=>s.classList.toggle('on',k===i));
+document.getElementById('ct').textContent=(i+1)+' / '+S.length;document.getElementById('bar').style.width=((i+1)/S.length*100)+'%'}
+document.getElementById('pv').onclick=()=>go(i-1);document.getElementById('nx').onclick=()=>go(i+1);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(i+1)}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(i-1)}else if(e.key==='Home')go(0);else if(e.key==='End')go(S.length-1)});
+let tx=null;document.getElementById('deck').addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.getElementById('deck').addEventListener('touchend',e=>{if(tx===null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(i+(d<0?1:-1));tx=null},{passive:true});
+go(0);
+</script></body></html>
