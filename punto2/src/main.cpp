@@ -20,7 +20,7 @@ int main(){
 	
 	double x0, v0;									//condiciones iniciales
 	double tau_on, tau_off; 								//tiempos de ensendido y apagado para el potencial diente de cierra
-	double m, L, U0, alpha, gamma, T, kb=1;				//masa, periodo del potencial, profuncidad del poso, parámetro de asimetría, coeficiente de fricción, temperatura
+	double m, L, U0, alpha, gamma, T, kb=1;				//masa, periodo del potencial, profuncidad del poso, parï¿½metro de asimetrï¿½a, coeficiente de fricciï¿½n, temperatura
 	double t0 = 0, tf, dt=0.001;							//tiempos
 	int N_pasos, N_ens, saveStride = 10;	//discretización de la simulación, número de simulaciones para el ruido, cada cuanto guardar datos
 	
